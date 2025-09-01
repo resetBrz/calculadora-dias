@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Soma de Datas</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+    :root {
+      --primary-color: rgb(13, 106, 134);
+      --primary-color-darker: rgb(10, 84, 107);
+    }
+    * {
+      box-sizing: border-box;
+      outline: 0;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--primary-color);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.3em;
+      line-height: 1.5em;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 15px;
+    }
+
+    form input, form label, form button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    form input {
+      font-size: 24px;
+      height: 50px;
+      padding: 0 20px;
+    }
+
+    form input:focus {
+      outline: 1px solid var(--primary-color);
+    }
+
+    form button {
+      border: none;
+      background: var(--primary-color);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      height: 50px;
+      width: 300px;
+      cursor: pointer;
+      margin-top: 1px;
+    }
+
+    form button:hover {
+      background: var(--primary-color-darker);
+    }
+
+    .resultado {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+
+    .botoes {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <section class="container">
+    <h1>Calculadora de Soma de Datas</h1>
+    <form id="formularioDatas">
+      <label for="dataInicial">Data Inicial</label>
+      <input type="date" id="dataInicial" required>
+
+      <label for="mesesAdicionar">Meses a Adicionar</label>
+      <input type="number" id="mesesAdicionar" min="0" placeholder="Ex: 2">
+
+      <label for="diasAdicionar">Dias a Adicionar</label>
+      <input type="number" id="diasAdicionar" min="0" placeholder="Ex: 15">
+
+      <div class="botoes">
+        <button type="submit">Calcular Data Final</button>
+        <button type="button" id="botaoResetar">Resetar</button>
+      </div>
+    </form>
+
+    <div class="resultado"></div>
+  </section>
+
+  <script>
+    function calculadoraSomaDatas() {
+      const form = document.getElementById('formularioDatas')
+      const resultado = document.querySelector('.resultado')
+      const botaoResetar = document.getElementById('botaoResetar')
+
+      form.addEventListener('submit', function(event) {
+        event.preventDefault()
+
+        const dataInicialStr = document.getElementById('dataInicial').value
+        const mesesAdicionar = parseInt(document.getElementById('mesesAdicionar').value) || 0
+        const diasAdicionar = parseInt(document.getElementById('diasAdicionar').value) || 0
+
+        if (!dataInicialStr) {
+          resultado.innerHTML = '<p>Informe a data inicial.</p>'
+          return
+        }
+
+        const dataInicial = new Date(dataInicialStr)
+        dataInicial.setMonth(dataInicial.getMonth() + mesesAdicionar)
+        dataInicial.setDate(dataInicial.getDate() + diasAdicionar)
+
+        const opcoes = {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }
+
+        const dataFormatada = dataInicial.toLocaleDateString('pt-BR', opcoes)
+        resultado.innerHTML = `<p>Data final: ${dataFormatada}</p>`
+      })
+
+      botaoResetar.addEventListener('click', function() {
+        form.reset()
+        resultado.innerHTML = ''
+      })
+    }
+
+    calculadoraSomaDatas()
+  </script>
+</body>
+</html>
